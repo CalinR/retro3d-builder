@@ -1,0 +1,51 @@
+@import 'reset';
+
+html, body {
+  height: 100%;
+}
+
+.builder-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.builder-controls {
+  background: #eee;
+  font-size: 0;
+  padding: 2px;
+
+  .ui-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    font-size: 16px;
+    color: rgba(0,0,0, 0.35);
+    cursor: pointer;
+    margin: 2px;
+    border-radius: 4px;
+
+    &:hover {
+      color: #1e88e5;
+    }
+
+    &:focus {
+      background: #1e88e5;
+      color: #fff;
+      outline: none;
+    }
+  }
+
+  .btn-text {
+    font-size: 10px;
+    display: block;
+    text-align: center;
+  }
+}
+
+.builder-view {
+  overflow: auto;
+  flex: 1;
+  background: rgba(19, 26, 34, 1);
+}
