@@ -47,5 +47,12 @@ html, body {
 .builder-view {
   overflow: auto;
   flex: 1;
-  background: rgba(19, 26, 34, 1);
+  background: #19232d;
+  position: relative;
+
+  .canvas {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
 }
