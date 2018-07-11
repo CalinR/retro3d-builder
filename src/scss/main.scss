@@ -1,7 +1,11 @@
 @import 'reset';
 
-html, body {
+html, body, .app {
   height: 100%;
+}
+
+.ui-btn * {
+  pointer-events: none;
 }
 
 .builder-wrapper {
@@ -14,6 +18,7 @@ html, body {
   background: #eee;
   font-size: 0;
   padding: 2px;
+  display: flex;
 
   .ui-btn {
     width: 40px;
@@ -31,9 +36,12 @@ html, body {
     }
 
     &:focus {
+      outline: none;
+    }
+
+    &.active {
       background: #1e88e5;
       color: #fff;
-      outline: none;
     }
   }
 
@@ -44,13 +52,34 @@ html, body {
   }
 }
 
+.button-group {
+  position: relative;
+  padding: 0 5px;
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    width: 1px;
+    height: 74%;
+    background: rgba(0,0,0,0.15);
+    transform: translate(0, -50%);
+  }
+
+  &::last-child:after {
+    display: none;
+  }
+}
+
 .builder-view {
   overflow: auto;
   flex: 1;
   background: #19232d;
   position: relative;
 
-  .canvas {
+  .foreground {
     position: absolute;
     left: 0;
     top: 0;
