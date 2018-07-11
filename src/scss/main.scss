@@ -85,3 +85,13 @@ html, body, .app {
     top: 0;
   }
 }
+
+.info-container {
+  pointer-events: none;
+  background: rgba(0,0,0,0.5);
+  color: #fff;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  padding: 8px 16px;
+  border-radius: 6px;
+}

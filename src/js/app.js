@@ -10,6 +10,7 @@ export default class App extends Component {
       sectors: [],
       activeTool: null,
       snap: false,
+      info: false,
       gridSize: 32
     }
   }
@@ -21,18 +22,28 @@ export default class App extends Component {
   }
 
   toggleSnap(){
-    this.setState(((state) => {
+    this.setState((state) => {
       return {
         snap: !state.snap
       }
-    }))
+    })
+  }
+
+  toggleInfo(){
+    this.setState((state) => {
+      return {
+        info: !state.info
+      }
+    })
   }
 
   render(){
     const props = {
       changeTool: tool => this.changeTool(tool),
       toggleSnap: () => this.toggleSnap(),
+      toggleInfo: () => this.toggleInfo(),
       snap: this.state.snap,
+      info: this.state.info,
       activeTool: this.state.activeTool,
       gridSize: this.state.gridSize
     }

@@ -19,6 +19,10 @@ export default class BuilderControls extends Component {
             <i className="fas fa-th-large"></i>
             <span className="btn-text">Snap</span>
           </button>
+          <button className={`info-btn ui-btn ${ this.props.info ? 'active' : '' }`} onClick={ () => this.props.toggleInfo() }>
+            <i className="fas fa-info-circle"></i>
+            <span className="btn-text">Info</span>
+          </button>
         </div>
       </div>
     )
