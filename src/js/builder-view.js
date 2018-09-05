@@ -1,26 +1,23 @@
 import React, { Component } from 'react'
 import BuilderBackground from './builder-background'
 import InfoContainer from './info-container'
+import EditorCanvas from './editor-canvas';
 
 export default class BuilderView extends Component {
   constructor(){
     super();
     this.state = {
-      mouseX: 0,
-      mouseY: 0
+      activeSector: {
+        vertices: []
+      },
+      sectors: []
     }
-    this.vertexSize = 8;
   }
 
   componentDidMount(){
-    const context = this.foreground.getContext('2d');
-    // window.requestAnimationFrame(() => this.updateCanvas());
+    const context = this.editor.canvas.getContext('2d');
     context.canvas.onmousemove = e => this.mouseMove(e);
-    this.updateCanvas();
-  }
-
-  componentDidUpdate(){
-    this.updateCanvas();
+    context.canvas.onmousedown = e => this.mouseClick(e);
   }
 
   mouseMove(e){
@@ -32,32 +29,84 @@ export default class BuilderView extends Component {
       y = Math.round(y / this.props.gridSize) * this.props.gridSize
     }
 
+    const snapToVertex = this.snapMouseToVertex(x, y);
+
+    if(snapToVertex){
+      x = snapToVertex.x;
+      y = snapToVertex.y;
+    }
+
     this.setState({
       mouseX: x,
       mouseY: y
     })
   }
 
-  updateMousePointer(){
-    const context = this.foreground.getContext('2d');
-    context.beginPath();
-    context.fillStyle = '#f39c12';
-    context.fillRect(this.state.mouseX - this.vertexSize / 2, this.state.mouseY - this.vertexSize / 2, this.vertexSize, this.vertexSize);
-    context.closePath();
+  snapMouseToVertex(x, y){
+    const snapRange = this.props.gridSize;
+
+    for(let vertex of this.state.activeSector.vertices){
+      if (x > vertex.x - snapRange && x < vertex.x + snapRange && y > vertex.y - snapRange && y < vertex.y + snapRange){
+        return vertex
+      }
+    }
+
+    for(let sector of this.state.sectors){
+      for(let vertex of sector.vertices){
+        if (x > vertex.x - snapRange && x < vertex.x + snapRange && y > vertex.y - snapRange && y < vertex.y + snapRange){
+          return vertex
+        }
+      }
+    }
+
+    return null
   }
 
-  updateCanvas(){
-    const context = this.foreground.getContext('2d');
-    context.clearRect(0,0,context.canvas.width,context.canvas.height);
-    this.updateMousePointer();
+  mouseClick(e){
+    const vertex = {
+      x: this.state.mouseX,
+      y: this.state.mouseY
+    }
+    const snapToVertex = this.snapMouseToVertex(this.state.mouseX, this.state.mouseY);
+    let activeSector = {...this.state.activeSector}
+    const vertices = [...this.state.activeSector.vertices, vertex];
+    activeSector.vertices = vertices;
+    let sectors = [...this.state.sectors];
+
+    if (snapToVertex == activeSector.vertices[0]){
+      const sector = {...activeSector}
+      sectors = [...this.state.sectors, sector]
+      activeSector.vertices = [];
+    }
+
+    this.setState({
+      activeSector,
+      sectors
+    })
   }
 
   render(){
     return (
       <div className="builder-view">
-        <BuilderBackground width="2000" height="2000" gridSize={ this.props.gridSize } />
-        <canvas className="foreground" width="2000" height="2000" ref={ canvas => {this.foreground = canvas} } />
-        <InfoContainer x={ this.state.mouseX } y={ this.state.mouseY } show={ this.props.info }/>
+        <BuilderBackground
+          width="2000"
+          height="2000"
+          gridSize={ this.props.gridSize }
+        />
+        <EditorCanvas
+          x={ this.state.mouseX }
+          y={ this.state.mouseY }
+          gridSize={ this.props.gridSize }
+          snap={ this.props.snap }
+          sectors={ this.state.sectors }
+          activeSector={ this.state.activeSector } 
+          ref={ canvas => {this.editor = canvas} }
+        />
+        <InfoContainer
+          x={ this.state.mouseX }
+          y={ this.state.mouseY }
+          show={ this.props.info }
+        />
       </div>
     )
   }
